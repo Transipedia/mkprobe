@@ -16,7 +16,7 @@ ATCG                 kmer 1
 ```
 contigs of output
 ```
-ATCGCTA	             contig 1
+ATCGCTA              contig 1
       CTATGG         contig 2
 ```
 
