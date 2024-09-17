@@ -6,13 +6,13 @@ Build contigs from a suite of contiguous kmers as fasta format
 
 kmers of input fasta file : 
 ```
-ATCG	             kmer 1
- TCGC	             kmer 2
-  CGCT	             kmer 3
-   GCTA	             kmer 4
-      CTAT     	     kmer 5
+ATCG                 kmer 1
+ TCGC                kmer 2
+  CGCT               kmer 3
+   GCTA              kmer 4
+      CTAT           kmer 5
        TATG          kmer 6
-        ATGG  	     kmer 7
+        ATGG         kmer 7
 ```
 contigs of output
 ```
@@ -29,7 +29,7 @@ No dependency required.
 pip install mkprobe
 
 # or github
-git clone ....
+git clone https://github.com/Transipedia/mkprobe.git
 ```
 
 
