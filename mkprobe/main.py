@@ -30,11 +30,11 @@ def main():
 def compute(args, file):
     """ Function doc """
     ### get base name file
-    basefile = '.'.join(file.name.rstrip('.gz').split('.')[:-1]).split('/')[-1]
+    basename = os.path.basename(file.name)
 
     ### compute
     contigs = []
-    contig_id = handle_contig_id(args, file.readline(), basefile)
+    contig_id = handle_contig_id(args, file.readline(), basename)
     contig_seq = file.readline().rstrip('\n')
     contig_id_last = None
     for raw in file:
@@ -46,7 +46,7 @@ def compute(args, file):
             contig_seq += raw[-2:-1]
         else:
             contigs.append((contig_id, contig_seq))
-            contig_id = handle_contig_id(args, contig_id_last, basefile)
+            contig_id = handle_contig_id(args, contig_id_last, basename)
             contig_seq = raw.rstrip('\n')
     ### last contig
     contigs.append((contig_id, contig_seq))
@@ -54,16 +54,16 @@ def compute(args, file):
     return contigs
 
 
-def handle_contig_id(args, contig_id, basefile):
+def handle_contig_id(args, contig_id, basename):
     items = contig_id.rstrip('\n').split(' ')
 
-    ### add file name if multiple files
-    if len(args.files) > 1:
-        items.append(basefile)
+    ### keep only ID part of the header (if not keep-all argument) 
+    if not args.keep_all:
+        items = [items[0]]
 
-    ### remove contig info (ex ct:1) (added by kmerator)
-    if len(items) > 1 and items[1].startswith('ct:'):
-        items.pop(1)
+    ### add file name if add-filename argument
+    if args.add_filename:
+        items.append(basename)
 
     return ' '.join(items)
 
@@ -96,7 +96,14 @@ def usage():
                               "output will be a tabuled file"),
                         type=argparse.FileType('w'),
                        )
-
+    parser.add_argument("-a", "--add-filename",
+                        action="store_true",
+                        help="add file name to the headers, useful for multiple files",
+                       )
+    parser.add_argument("-k", "--keep-all",
+                        action="store_true",
+                        help="keep all fasta headers, not just the first space-separated string",
+                       )
     parser.add_argument('-v', '--version',
                         action='version',
                         version=f"{parser.prog} v{info.VERSION}",
